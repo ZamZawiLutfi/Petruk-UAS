@@ -1,2 +1,0 @@
-# Petruk-UAS
-kakshsh
