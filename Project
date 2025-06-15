@@ -89,6 +89,13 @@ public:
         cout << "-> Contoh input tujuan: mengatasi jerawat, mencerahkan\n\n";
     }
 };
+void tampilkanRekomendasi(Produk* produk) {
+    cout << "- " << produk->nama 
+         << "\n  Kulit: " << produk->jenisKulit 
+         << "\n  Tujuan: " << produk->tujuan
+         << "\n  Harga: Rp " << produk->harga << "000"
+         << "\n  Rating: " << produk->rating << "/5\n\n";
+}
 int main() {
     Rekomendasi app;
 
