@@ -89,3 +89,56 @@ public:
         cout << "-> Contoh input tujuan: mengatasi jerawat, mencerahkan\n\n";
     }
 };
+int main() {
+    Rekomendasi app;
+
+    Produk daftar[] = {
+        {"Glow Serum", "berminyak", "mencerahkan", 75, 5},
+        {"Hydra Moist", "kering", "melembapkan", 50, 4},
+        {"Acne Fighter", "berminyak", "mengatasi jerawat", 60, 5},
+        {"Soothing Gel", "sensitif", "menenangkan", 55, 4},
+        {"Tone Balance", "normal", "meratakan warna kulit", 65, 4},
+        {"Barrier Cream", "sensitif", "memperbaiki skin barrier", 80, 5},
+        {"Daily Repair", "kering", "memperbaiki skin barrier", 70, 4},
+        {"Exfo Tonic", "kombinasi", "menghilangkan chicken skin", 60, 4},
+        {"Smooth Touch", "kombinasi", "menghilangkan chicken skin", 55, 5}
+    };
+
+    for (Produk& p : daftar)
+        app.tambahProduk(p);
+
+    app.tampilkanMenu();
+
+    char kulitInput[50];
+    cout << "Masukkan jenis kulit Anda: ";
+    cin.getline(kulitInput, 50);
+    string jenisKulit(kulitInput);
+
+    string inputTujuan;
+    cout << "Masukkan tujuan skincare (pisahkan dengan koma): ";
+    getline(cin, inputTujuan);
+
+    int hargaMaks;
+    cout << "Masukkan harga maksimal (dalam ribuan, contoh: 70000): ";
+    cin >> hargaMaks;
+
+    if (hargaMaks < 0) {
+        cout << "Harga tidak boleh negatif. Program dihentikan.\n";
+        return 1;
+    }
+
+    vector<string> tujuanUser = app.splitTujuan(inputTujuan);
+    vector<Produk> hasil = app.cariRekomendasi(jenisKulit, tujuanUser, hargaMaks);
+
+    cout << "\n=== Rekomendasi Produk ===\n";
+    if (hasil.empty()) {
+        cout << "Maaf, tidak ada produk yang cocok dengan preferensi Anda.\n";
+    } else {
+        for (Produk& p : hasil) {
+            tampilkanRekomendasi(&p);
+        }
+    }
+
+    cout << "\nTerima kasih telah menggunakan sistem rekomendasi skincare!\n";
+    return 0;
+}
