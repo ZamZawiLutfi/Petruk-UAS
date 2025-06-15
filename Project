@@ -16,3 +16,76 @@ struct Produk {
     int harga;
     int rating;
 }; 
+
+// Kelas sistem rekomendasi skincare
+class Rekomendasi {
+private:
+    vector<Produk> daftarProduk;
+    int hargaMin = numeric_limits<int>::max();
+    int hargaMax = numeric_limits<int>::min();
+
+public:
+    void tambahProduk(const Produk& p) {
+        daftarProduk.push_back(p);
+        if (p.harga < hargaMin) hargaMin = p.harga;
+        if (p.harga > hargaMax) hargaMax = p.harga;
+    }
+
+    vector<string> splitTujuan(const string& input) {
+        vector<string> hasil;
+        stringstream ss(input);
+        string tujuan;
+        while (getline(ss, tujuan, ',')) {
+            tujuan.erase(0, tujuan.find_first_not_of(" \t"));
+            hasil.push_back(tujuan);
+        }
+        return hasil;
+    }
+
+    bool cocokTujuan(const string& tujuanProduk, const vector<string>& tujuanUser) {
+        for (const auto& t : tujuanUser) {
+            if (tujuanProduk == t) return true;
+        }
+        return false;
+    }
+
+    int hitungSkor(const Produk& p, const string& jenisKulit, const vector<string>& tujuanUser, int hargaMaks) {
+        int skor = 0;
+        if (p.jenisKulit == jenisKulit || 
+           (jenisKulit == "kombinasi" && 
+           (p.jenisKulit == "berminyak" || p.jenisKulit == "kering" || p.jenisKulit == "kombinasi")))
+            skor += 2;
+        if (cocokTujuan(p.tujuan, tujuanUser))
+            skor += 2;
+        if (p.harga <= hargaMaks)
+            skor += 1;
+        return skor;
+    }
+
+    vector<Produk> cariRekomendasi(const string& jenisKulit, const vector<string>& tujuanUser, int hargaMaks) {
+        vector<Produk> hasil;
+        for (const auto& p : daftarProduk) {
+            int skor = hitungSkor(p, jenisKulit, tujuanUser, hargaMaks);
+            if (skor >= 4) {
+                hasil.push_back(p);
+            }
+        }
+
+        sort(hasil.begin(), hasil.end(), [](const Produk& a, const Produk& b) {
+            return a.rating > b.rating;
+        });
+
+        return hasil;
+    }
+
+    void tampilkanMenu() {
+        cout << "\n=== MENU REKOMENDASI SKINCARE ===\n";
+        cout << "* Jenis kulit: berminyak, kering, sensitif, normal, kombinasi\n";
+        cout << "* Tujuan skincare:\n";
+        cout << "  mencerahkan, melembapkan, mengatasi jerawat, menenangkan,\n";
+        cout << "  meratakan warna kulit, menghilangkan chicken skin,\n";
+        cout << "  memperbaiki skin barrier\n";
+        cout << "* Rentang harga produk: Rp " << hargaMin << "000 - Rp " << hargaMax << "000\n";
+        cout << "-> Contoh input tujuan: mengatasi jerawat, mencerahkan\n\n";
+    }
+};
