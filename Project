@@ -1,1 +1,18 @@
-Halo
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <algorithm>
+#include <limits>
+#include <cstring>
+
+using namespace std;
+
+// Struktur data produk skincare
+struct Produk {
+    string nama;
+    string jenisKulit;
+    string tujuan;
+    int harga;
+    int rating;
+}; 
